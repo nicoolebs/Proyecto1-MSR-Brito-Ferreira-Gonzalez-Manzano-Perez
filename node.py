@@ -1,9 +1,11 @@
+#Importaciones respectivas
 import sys
 
+#Clase vértice
 class Vertex:
     def __init__(self, id, city, visa):
 
-        # Codigo, ciudad, requiere visa
+        #Código, ciudad, y si requiere visa o no para visitar de cada ciudad
         self.id = id
         self.city = city
         self.visa = visa
@@ -11,18 +13,18 @@ class Vertex:
         #Lista de vertices adyacentes
         self.adjacent = {}
 
-        # Se establece la distancia infinito a todos los nodos
+        #Se establece la distancia infinito a todos los nodos
         self.distance = sys.maxint
-        # Se marcan los nodos como no visitados inicialmente   
+        #Se marcan los nodos como no visitados inicialmente   
         self.visited = False  
-        # Predecesor
+        #Predecesor
         self.previous = None
 
     #Agregar nodos vecinos
     def add_neighbor(self, neighbor, weight=0):
         self.adjacent[neighbor] = weight
 
-    #Getters y setters
+    #Getters y Setters
     def get_connections(self):
         return self.adjacent.keys()  
 
@@ -49,7 +51,6 @@ class Vertex:
 
     def get_previous(self, current):
         return self.previous
-
 
     def __str__(self):
         return str(self.id) + ' adjacent: ' + str([x.id for x in self.adjacent])
