@@ -78,7 +78,8 @@ if __name__ == '__main__':
     #Reconstruir el camino obtenido por el método correspondiente 
     target = g.get_vertex(to)
     path = [target.get_id()]
-    shortest(target, path)
+    costo = []
+    shortest(target, path, costo)
     path.reverse()
 
     #Mensaje de resultado para el usuario
@@ -95,6 +96,7 @@ if __name__ == '__main__':
     #Si el usuario elige como criterio el número de vuelos mínimo
     else:
         print ('El número mínimo de vuelos de ' + frm + ' a ' + to + ' es de ' + str(target.get_distance()))
+        print ('El costo de ' + frm + ' a ' + to + ' es de: $' + str(sum(costo)))
         print ('En este, el camino a tomar será: ')
         for x in range(len(path)):
             print(str(path[x]))

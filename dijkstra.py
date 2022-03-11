@@ -5,14 +5,15 @@ def sort_nodes(node):
   return node[0]
 
 #Método para buscar el camino hasta un vertice
-def shortest(v, path):
+def shortest(v, path, costo):
 
 	#Si existe un predecesor para el vertice
     if v.previous:
 		#Se agrega al camino que se está formando este vértice
         path.append(v.previous.get_id())
+        costo.append(v.get_weight(v.previous))
 		#Se busca en el anterior su predecesor de forma recursiva hasta llegar al inicio del camino indicado
-        shortest(v.previous, path)
+        shortest(v.previous, path, costo)
 	#Retorna el camino deseado
     return
 
