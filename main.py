@@ -54,15 +54,20 @@ if __name__ == '__main__':
     print ('\n')
 
     #visa: posee o no vida el usuario
-    visa = input('¿Posee usted VISA? \n1. SI \n2. NO \nIngrese en número correspondiente: ')
+    visa = int(input('¿Posee usted VISA? \n1. SI \n2. NO \nIngrese en número correspondiente: '))
     print ('\n')
+
+    if visa == 1:
+        visa = True
+    else:
+        visa = False
     
     #Criterio a tomar en cuenta para correr los métodos
-    route = input('¿Qué criterio desea considerar a la hora del viaje? \n1. Costo mínimo \2. Número de vuelos mínimo \nIngrese en número correspondiente: ')
+    route = input('¿Qué criterio desea considerar a la hora del viaje? \n1. Costo mínimo \n2. Número de vuelos mínimo \nIngrese en número correspondiente: ')
     print ('\n')
 
     #Si el usuario elige como criterio el costo mínimo 
-    if route == 1:
+    if route == '1':
         #Se ejecuta el método correspondiente
         dijkstra_min_cost(g, g.get_vertex(frm), g.get_vertex(to), visa) 
     #Sino, si el usuario elige como criterio el número de vuelos mínimo
@@ -74,18 +79,25 @@ if __name__ == '__main__':
     target = g.get_vertex(to)
     path = [target.get_id()]
     shortest(target, path)
+    path.reverse()
 
     #Mensaje de resultado para el usuario
     
     #Si el usuario elige como criterio el costo mínimo, el mensaje es 
-    if route == 1:
-        print ('El costo mínimo de ' + frm + ' a ' + to + ' es de: ' + target.get_distance()+ '$')
-        print ('En este, el camino a tomar será: ' %(path[::-1]))
+    if target.get_distance() == 99999999999:
+        print ('')
+    elif route == '1':
+        print ('El costo mínimo de ' + frm + ' a ' + to + ' es de: $' + str(target.get_distance()))
+        print ('En este, el camino a tomar será: ')
+        for x in range(len(path)):
+            print(str(path[x]))
     
     #Si el usuario elige como criterio el número de vuelos mínimo
     else:
-        print ('El número mínimo de vuelos de ' + frm + ' a ' + to + ' es de ' + target.get_distance())
-        print ('En este, el camino a tomar será: ' %(path[::-1]))
+        print ('El número mínimo de vuelos de ' + frm + ' a ' + to + ' es de ' + str(target.get_distance()))
+        print ('En este, el camino a tomar será: ')
+        for x in range(len(path)):
+            print(str(path[x]))
 
 #OJOO !!!!!!!! OJOJOJOOOJ
 #Verificar que el destino no sea igual al origen, que no metan num donde van letras

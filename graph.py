@@ -8,15 +8,14 @@ class Graph:
         #Lista de vertices del grafo
         self.vert_dict = {}
 
-    #si no explota se quita OJOOOOOOOOOOO !!!!!!!!!!!!!!!!!!!!!!!!!!!! OJOOOOOOO 
     def __iter__(self):
         return iter(self.vert_dict.values())
 
     #Método para agregar un vertice al grafo
-    def add_vertex(self, node):
+    def add_vertex(self, id, city, visa):
 
-        new_vertex = Vertex(node)
-        self.vert_dict[node] = new_vertex
+        new_vertex = Vertex(id, city, visa)
+        self.vert_dict[id] = new_vertex
         return new_vertex
 
     #Método para obtener un vertice del grafo

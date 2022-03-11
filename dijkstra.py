@@ -1,6 +1,9 @@
 #Importaciones respectivas
 import heapq
 
+def sort_nodes(node):
+  return node[0]
+
 #Método para buscar el camino hasta un vertice
 def shortest(v, path):
 
@@ -30,19 +33,20 @@ def dijkstra_min_cost(aGraph, start, target, visa):
 		#Si la ciudad no requiere VISA y la persona no tiene VISA, se sabe que no se puede hacer escala en las ciudades que necesiten el documento -VISA-
 		if target.visa == False and visa == False:
 			#Se crea una cola con todos los nodos no visitados, excluyendo los que necesitan visa para ser visitados
-			unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visa]
+			unvisited_queue = [(v.get_distance(),v) for v in aGraph if (not v.visa) or (v.id == start.id)]
 		#Si la persona tiene VISA
 		else:
 			#Si la persona tiene VISA, se crea una cola con todos los nodos no visitados, ya que puede entrar a todas las ciudades del grafo
 			unvisited_queue = [(v.get_distance(),v) for v in aGraph]
 		
-		heapq.heapify(unvisited_queue)
+		unvisited_queue.sort(key=sort_nodes)
+		unvisited_queue_list = list(unvisited_queue)
 
 		#Se recorre la cola de no visitados
-		while len(unvisited_queue):
+		while len(unvisited_queue_list):
 
 			#Se Visita el nodo no visitado que tenga la menor distancia conocia al nodo de inicio y lo marca como visitado
-			uv = heapq.heappop(unvisited_queue)
+			uv = unvisited_queue_list.pop(0)
 			current = uv[1]
 			current.set_visited()
 
@@ -66,8 +70,7 @@ def dijkstra_min_cost(aGraph, start, target, visa):
 			#Luego se va a reconstruir la cola con los vertices no visitados, para ello
 
 			#Se vacía la cola que se tiene
-			while len(unvisited_queue):
-				heapq.heappop(unvisited_queue)
+			unvisited_queue = []
 			#Se llena la cola con los no visitados
 
 			#Si la ciudad no requiere VISA y la persona no tiene VISA, se sabe que no se puede hacer escala en las ciudades que necesiten el documento -VISA-
@@ -80,7 +83,8 @@ def dijkstra_min_cost(aGraph, start, target, visa):
 				#Si la persona si tiene VISA, se crea una cola con todos los nodos no visitados, porque puede entrar a todas las ciudades
 				unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
 			
-			heapq.heapify(unvisited_queue)
+			unvisited_queue.sort(key=sort_nodes)
+			unvisited_queue_list = list(unvisited_queue)
 		
 #Método de Dijkstra para buscar el camino con menor cantidad de vuelos entre la ciudad de partida y de llegada
 def dijkstra_min_steps(aGraph, start, target, visa):
@@ -99,19 +103,20 @@ def dijkstra_min_steps(aGraph, start, target, visa):
 		#Si la ciudad no requiere VISA y la persona no tiene VISA, no se puede hacer escala en las ciudades que necesiten el documento -VISA-
 		if target.visa == False and visa == False:
 			# Se crea una cola con todos los nodos no visitados, excluyendo los que necesitan visa
-			unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visa]
+			unvisited_queue = [(v.get_distance(),v) for v in aGraph if (not v.visa) or (v.id == start.id)]
 		#Si la persona tiene VISA
 		else:
 			#Si la persona si tiene VISA, se crea una cola con todos los nodos no visitados, porque puede entrar a todas las ciudades
 			unvisited_queue = [(v.get_distance(),v) for v in aGraph]
 		
-		heapq.heapify(unvisited_queue)
+		unvisited_queue.sort(key=sort_nodes)
+		unvisited_queue_list = list(unvisited_queue)
 
 		#Se recorre la cola de no visitados
-		while len(unvisited_queue):
+		while len(unvisited_queue_list):
 
 			#Se Visita el nodo no visitado que tenga la menor distancia conocia dal nodo de inicio y lo marca como visitado
-			uv = heapq.heappop(unvisited_queue)
+			uv = unvisited_queue_list.pop(0)
 			current = uv[1]
 			current.set_visited()
 
@@ -135,8 +140,7 @@ def dijkstra_min_steps(aGraph, start, target, visa):
 			#Luego se va a reconstruir la cola con los vertices no visitados. Para ello
 			
 			#Se vacía la cola
-			while len(unvisited_queue):
-				heapq.heappop(unvisited_queue)
+			unvisited_queue = []
 			#Se llena la cola con los no visitados
 
 			#Si la ciudad no requiere VISA y la persona no tiene VISA, se sabe que no se puede hacer escala en las ciudades que necesiten el documento -VISA-
@@ -149,4 +153,5 @@ def dijkstra_min_steps(aGraph, start, target, visa):
 				#Si la persona si tiene VISA, se crea una cola con todos los nodos no visitados, porque puede entrar a todas las ciudades
 				unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
 			
-			heapq.heapify(unvisited_queue)
+			unvisited_queue.sort(key=sort_nodes)
+			unvisited_queue_list = list(unvisited_queue)

@@ -14,7 +14,7 @@ class Vertex:
         self.adjacent = {}
 
         #Se establece la distancia infinito a todos los nodos
-        self.distance = sys.maxint
+        self.distance = 99999999999
         #Se marcan los nodos como no visitados inicialmente   
         self.visited = False  
         #Predecesor
