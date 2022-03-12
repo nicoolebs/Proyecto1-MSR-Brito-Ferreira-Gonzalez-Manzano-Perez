@@ -4,10 +4,10 @@ from graph import *
 #Función para crear el Grafo
 def createGraph():
 
-    #Creación del Grafo
+    #Creación del Grafo "g"
     g = Graph()
 
-    #Vertices de las ciudades del proyecto con sus códigos, nombres y si necesitan o no vida para entrar
+    #Vertices de las ciudades del proyecto con sus respectivos códigos, nombres y si necesitan o no visa para entrar
     g.add_vertex('CCS', 'Caracas', False)
     g.add_vertex('AUA', 'Aruba', True)
     g.add_vertex('BON', 'Bonaire', True)

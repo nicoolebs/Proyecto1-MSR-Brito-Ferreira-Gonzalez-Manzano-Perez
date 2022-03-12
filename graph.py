@@ -8,8 +8,10 @@ class Graph:
         #Lista de vertices del grafo
         self.vert_dict = {}
 
+
     def __iter__(self):
         return iter(self.vert_dict.values())
+
 
     #Método para agregar un vertice al grafo
     def add_vertex(self, id, city, visa):
@@ -18,6 +20,7 @@ class Graph:
         self.vert_dict[id] = new_vertex
         return new_vertex
 
+
     #Método para obtener un vertice del grafo
     def get_vertex(self, n):
         if n in self.vert_dict:
@@ -25,12 +28,14 @@ class Graph:
         else:
             return None
 
+
     #Método para agregar una arista al grafo
     def add_edge(self, frm, to, cost = 0):
 
         #Se asignan ambos vertices como vecinos y se colocan los costos de ida y vuelta respectivos
         self.vert_dict[frm].add_neighbor(self.vert_dict[to], cost)
         self.vert_dict[to].add_neighbor(self.vert_dict[frm], cost)
+
 
     #Getter
     def get_vertices(self):

@@ -57,6 +57,7 @@ if __name__ == '__main__':
     visa = int(input('¿Posee usted VISA? \n1. SI \n2. NO \nIngrese en número correspondiente: '))
     print ('\n')
 
+    #Guardando si el usuario Tiene o No tiene visa
     if visa == 1:
         visa = True
     else:
@@ -95,8 +96,8 @@ if __name__ == '__main__':
     
     #Si el usuario elige como criterio el número de vuelos mínimo
     else:
-        print ('El número mínimo de vuelos de ' + frm + ' a ' + to + ' es de ' + str(target.get_distance()))
-        print ('El costo de ' + frm + ' a ' + to + ' es de: $' + str(sum(costo)))
+        print ('El número mínimo de vuelos de ' + frm + ' a ' + to + ' es de ' + str(target.get_distance())+ ' vuelo-s-')
+        print ('Para este caso el costo de ' + frm + ' a ' + to + ' es de: $' + str(sum(costo)))
         print ('En este, el camino a tomar será: ')
         for x in range(len(path)):
             print(str(path[x]))

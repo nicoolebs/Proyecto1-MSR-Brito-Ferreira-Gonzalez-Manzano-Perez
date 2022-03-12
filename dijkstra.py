@@ -1,8 +1,11 @@
 #Importaciones respectivas
 import heapq
 
+
+#Método sort para los nodos
 def sort_nodes(node):
   return node[0]
+
 
 #Método para buscar el camino hasta un vertice
 def shortest(v, path, costo):
@@ -11,13 +14,15 @@ def shortest(v, path, costo):
     if v.previous:
 		#Se agrega al camino que se está formando este vértice
         path.append(v.previous.get_id())
+		#Se agrega el costo del mismo
         costo.append(v.get_weight(v.previous))
 		#Se busca en el anterior su predecesor de forma recursiva hasta llegar al inicio del camino indicado
         shortest(v.previous, path, costo)
 	#Retorna el camino deseado
     return
 
-#Método de Dijkstra para buscar el camino más barato entre los vértices/ciudades indicadas.
+
+#Método de Dijkstra para buscar el camino más barato entre los vértices/ciudades indicadas
 def dijkstra_min_cost(aGraph, start, target, visa):
 
 	#Si la ciudad destino requiere visa y la persona no tiene visa, no se puede buscar el camino más barato. Por ello se imprime el mensaje
@@ -27,7 +32,6 @@ def dijkstra_min_cost(aGraph, start, target, visa):
 	
 	#En otro caso
 	else:
-
 		#Se hace que la distancia al nodo de inicio, o sea a la ciudad de donde se parte, sea 0
 		start.set_distance(0)
 
@@ -72,13 +76,13 @@ def dijkstra_min_cost(aGraph, start, target, visa):
 
 			#Se vacía la cola que se tiene
 			unvisited_queue = []
+
 			#Se llena la cola con los no visitados
 
 			#Si la ciudad no requiere VISA y la persona no tiene VISA, se sabe que no se puede hacer escala en las ciudades que necesiten el documento -VISA-
 			if target.visa == False and visa == False:
 				#Se crea una cola con todos los nodos no visitados, excluyendo los que necesitan visa
 				unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited and not v.visa]
-			
 			#Si la persona tiene VISA
 			else:
 				#Si la persona si tiene VISA, se crea una cola con todos los nodos no visitados, porque puede entrar a todas las ciudades
@@ -87,6 +91,7 @@ def dijkstra_min_cost(aGraph, start, target, visa):
 			unvisited_queue.sort(key=sort_nodes)
 			unvisited_queue_list = list(unvisited_queue)
 		
+
 #Método de Dijkstra para buscar el camino con menor cantidad de vuelos entre la ciudad de partida y de llegada
 def dijkstra_min_steps(aGraph, start, target, visa):
 
@@ -97,7 +102,6 @@ def dijkstra_min_steps(aGraph, start, target, visa):
 	
 	#En otro caso
 	else:
-
 		#Se hace que la distancia al nodo de inicio, o sea a la ciudad de donde se parte, sea 0
 		start.set_distance(0)
 
@@ -128,7 +132,7 @@ def dijkstra_min_steps(aGraph, start, target, visa):
 				if next.visited:
 					continue
 
-				#Si el nodo no está visitado, se calcula la distancia de sus vecinos. En este caso sería un  viaje de un nodo a otro
+				#Si el nodo no está visitado, se calcula la distancia de sus vecinos. En este caso sería un viaje de un nodo a otro
 				new_dist = current.get_distance() + 1
 				
 				#Si la distancia calculada para un vecino es menor que la que se tenía asignada, se actualiza la distancia mínima y el predecesor
@@ -142,6 +146,7 @@ def dijkstra_min_steps(aGraph, start, target, visa):
 			
 			#Se vacía la cola
 			unvisited_queue = []
+			
 			#Se llena la cola con los no visitados
 
 			#Si la ciudad no requiere VISA y la persona no tiene VISA, se sabe que no se puede hacer escala en las ciudades que necesiten el documento -VISA-
