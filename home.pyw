@@ -1,51 +1,67 @@
+#Importaciones respectivas
 from tkinter import *
+from turtle import width
 from PIL import Image, ImageTk
 from dijkstra import *
 from graph import *
 from node import *
 from data import *
 
-# Configuracion inicial de la interfaz grafica
+
+#Configuración inicial de la interfaz gráfica
+
+#Creación de la ventana
 home = Tk()
-
+#Título de la ventana
 home.title("Metro Travel")
-
+#Ícono
 home.iconbitmap("imagenes/Logo 2.ico")
-
+#Para que la ventana no sea redimensionable
 home.resizable(0, 0)
 
-# Configuracion del frame que va a contener todos los widgets que se van a mostar en la interfaz grafica
+
+#Configuración del frame que va a contener todos los widgets que se van a mostar en la interfaz gráfica
 homeFrame = Frame()
-
 homeFrame.pack()
-
 homeFrame.config(bg="#f0ebe7")
+homeFrame.config(width="1200", height="795")
 
-homeFrame.config(width="1200", height="650")
 
-# Conficuracion de la imagen
+#Conficuración de la imagen/logo de la ventana
 logoImg = Image.open("imagenes/Logo 2.png")
-
-ajusteLogo = logoImg.resize((150, 150))
-
+ajusteLogo = logoImg.resize((130, 130))
 logoAjustado = ImageTk.PhotoImage(ajusteLogo)
 
-# Las etiquetas que de muestran en pantalla
+
+#Etiquetas que se muestran en pantalla con mensajes de Bienvenida
 Label(homeFrame, text="¡Bienvenido a la Agencia de Viajes Metro Travel!", fg="#000000", font=("Poppins", 18, "bold"), bg="#f0ebe7").place(x="600", y="50", anchor="center")
-
-Label(homeFrame, image=logoAjustado, bg="#f0ebe7").place(x="50", y="0")
-
+Label(homeFrame, image=logoAjustado, bg="#f0ebe7").place(x="50", y="15")
 Label(homeFrame, text="En Metro Travel nos especializamos en viajes desde "
                       "el Aeropuerto de Maiquetía hacia diversas Islas del Mar Caribe", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7")\
-                    .place(x="600", y="160", anchor="center")
+                    .place(x="600", y="115", anchor="center")
+
+
+#Etiqueta e imagen que muestran los destinos de la agencia
+Label(homeFrame, text="Destinos que ofrecemos:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="150", y="170", anchor="center")
+destinosImg = Image.open("imagenes/Destinos del Proyecto.png")
+ajusteDesti = destinosImg.resize((550, 190))
+destAjustado = ImageTk.PhotoImage(ajusteDesti)
+Label(homeFrame, image=destAjustado, bg="#f0ebe7").place(x="290", y="280",anchor='center')
 
 
 #COMBOBOXES PARA ELEGIR LA CIUDAD DE ORIGEN Y DESTINO
-ciudades = ['Caracas - CCS', 'Aruba - AUA', 'Bonaire - BON', 'Curazao - CUR', 'San Martín - SXM', 'Santo Domingo - SDQ', 'San Bartolomé - SBH','Puerto España - POS','Barbados - BGI','Fort de France - FDF','Point a Pitre - PTP']
 
+#Ciudades disponibles
+ciudades = ['Caracas - CCS', 'Aruba - AUA', 'Bonaire - BON', 'Curazao - CUR', 'San Martín - SXM', 'Santo Domingo - SDQ', 'San Bartolomé - SBH','Puerto España - POS','Barbados - BGI','Fort de France - FDF','Point a Pitre - PTP']
+#Etiqueta y Combobox señalando selección de origen
+Label(homeFrame, text="Por favor, seleccione el código del aeropuerto de la ciudad de origen:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="385")
 codigoOrigen = ciudades[0][-3:]
+#Etiqueta y Combobox señalando selección de origen
+Label(homeFrame, text="Por favor, seleccione el código del aeropuerto de la ciudad de destino:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="425")
 codigoDestino = ciudades[1][-3:]
-#metodos que guardan los codigos de la cuidad de origen y destino
+
+
+#Métodos que guardan los códigos de las cuidades de origen y destino
 def asignaCodigoOrigen(event):
     codigo = str(seleccionadoOrigen.get())
     codigoOrigen = codigo[-3:]
@@ -55,7 +71,6 @@ def asignaCodigoDestino(event):
     codigo = str(seleccionadoDestino.get())
     codigoDestino = codigo[-3:]
     print("seleccionado Destino", codigoDestino)
-
 
 seleccionadoOrigen = StringVar()
 seleccionadoOrigen.set(ciudades[0])
@@ -67,12 +82,15 @@ seleccionadoDestino.set(ciudades[1])
 ciudadDestino_menu = OptionMenu(home, seleccionadoDestino, *ciudades, command=asignaCodigoDestino)
 ciudadDestino_menu.pack()
 
-#Haciendo placing de los dropdowns
-ciudadOrigen_menu.place(x="400", y="250")
-ciudadDestino_menu.place(x="650", y="250")
+#Ubicando los dropdowns de la interfaz
+ciudadOrigen_menu.place(x="470", y="385")
+ciudadDestino_menu.place(x="470", y="425")
 
 
 #SELECCIONANDO SI EL CLIENTE TIENE VISA O NO
+#Etiqueta señalando que indique si tiene o no el documento
+Label(homeFrame, text="¿Posee usted VISA?", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="460")
+
 visaSelected = True
 
 def toggleVisa(event):
@@ -83,16 +101,19 @@ def toggleVisa(event):
 
     print("Visa", visaSelected)
 
-opcionesVisas = ["Si", "No"]
+opcionesVisas = ["Sí", "No"]
 
 seleccionadoVisa = StringVar()
 seleccionadoVisa.set(opcionesVisas[0])
 seleccionadoVisa_menu = OptionMenu(home, seleccionadoVisa, *opcionesVisas, command=toggleVisa)
 seleccionadoVisa_menu.pack()
-seleccionadoVisa_menu.place(x="450", y="325")
+seleccionadoVisa_menu.place(x="160", y="460")
 
 
 #SELECCIONANDO SI EL CLIENTE QUIERE EL COSTO O NUMERO DE VUELOS MINIMOS
+#Etiqueta señalando que indique si tiene o no el documento
+Label(homeFrame, text="¿Qué criterio desea considerar a la hora del viaje? Seleccione 1.- Costo mínimo ó 2.- Número de vuelos mínimo", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="490")
+
 criterio = '1'
 
 def toggleCriterio(event):
@@ -105,9 +126,7 @@ seleccionadoCriterio = StringVar()
 seleccionadoCriterio.set(opcionesCriterio[0])
 seleccionadoCriterio_menu = OptionMenu(home, seleccionadoCriterio, *opcionesCriterio, command=toggleCriterio)
 seleccionadoCriterio_menu.pack()
-seleccionadoCriterio_menu.place(x="675", y="325")
-
-
+seleccionadoCriterio_menu.place(x="695", y="490")
 
 
 #METODO PARA EJECUTAR DIJKSTRA
@@ -156,7 +175,7 @@ def ejecutarDijkstra():
 
 
 # Boton para que lleva a la interfaz de seleccion de vuelo
-botonComenzar = Button(homeFrame, text="Comenzar", width=15, bg="#f5f5f5", font=("Roboto", 10, "bold"), command=ejecutarDijkstra).place(x="600", y="600", anchor="center")
+botonComenzar = Button(homeFrame, text="Buscar Viaje", width=25,height=1, bg="#B6CBDE", font=("Roboto", 10, "bold"), command=ejecutarDijkstra).place(x="600", y="540", anchor="center")
 
 
 home.mainloop()
