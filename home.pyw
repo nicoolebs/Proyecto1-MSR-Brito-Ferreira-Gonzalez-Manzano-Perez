@@ -108,6 +108,9 @@ seleccionadoCriterio_menu.pack()
 seleccionadoCriterio_menu.place(x="675", y="325")
 
 
+#DIBUJANDO EL GRAFO COMPLETO
+
+
 
 
 #METODO PARA EJECUTAR DIJKSTRA
