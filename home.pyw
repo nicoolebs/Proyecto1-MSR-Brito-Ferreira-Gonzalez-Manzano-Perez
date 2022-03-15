@@ -64,26 +64,25 @@ codigoOrigen = ciudades[0][-3:]
 Label(homeFrame, text="Por favor, seleccione el código del aeropuerto de la ciudad de destino:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="425")
 codigoDestino = ciudades[1][-3:]
 
-
 #Métodos que guardan los códigos de las cuidades de origen y destino
-def asignaCodigoOrigen(event):
+def asignaCodigoOrigen():
     codigo = str(seleccionadoOrigen.get())
     codigoOrigen = codigo[-3:]
-    print("seleccionado Origen", codigoOrigen)
+    return codigoOrigen
 
-def asignaCodigoDestino(event):
+def asignaCodigoDestino():
     codigo = str(seleccionadoDestino.get())
     codigoDestino = codigo[-3:]
-    print("seleccionado Destino", codigoDestino)
+    return codigoDestino
 
-seleccionadoOrigen = StringVar()
+seleccionadoOrigen = StringVar(homeFrame)
 seleccionadoOrigen.set(ciudades[0])
-ciudadOrigen_menu = OptionMenu(home, seleccionadoOrigen, *ciudades, command=asignaCodigoOrigen)
+ciudadOrigen_menu = OptionMenu(homeFrame, seleccionadoOrigen, *ciudades)
 ciudadOrigen_menu.pack()
 
 seleccionadoDestino = StringVar()
 seleccionadoDestino.set(ciudades[1])
-ciudadDestino_menu = OptionMenu(home, seleccionadoDestino, *ciudades, command=asignaCodigoDestino)
+ciudadDestino_menu = OptionMenu(home, seleccionadoDestino, *ciudades)
 ciudadDestino_menu.pack()
 
 #Ubicando los dropdowns de la interfaz
@@ -97,19 +96,18 @@ Label(homeFrame, text="¿Posee usted VISA?", fg="#000000", font=("Roboto", 12, "
 
 visaSelected = True
 
-def toggleVisa(event):
+def toggleVisa():
     if seleccionadoVisa.get() == "Si":
-        visaSelected = True
+        return True
     else:
-        visaSelected = False
+        return False
 
-    print("Visa", visaSelected)
 
-opcionesVisas = ["Sí", "No"]
+opcionesVisas = ["Si", "No"]
 
 seleccionadoVisa = StringVar()
 seleccionadoVisa.set(opcionesVisas[0])
-seleccionadoVisa_menu = OptionMenu(home, seleccionadoVisa, *opcionesVisas, command=toggleVisa)
+seleccionadoVisa_menu = OptionMenu(home, seleccionadoVisa, *opcionesVisas)
 seleccionadoVisa_menu.pack()
 seleccionadoVisa_menu.place(x="160", y="460")
 
@@ -120,15 +118,14 @@ Label(homeFrame, text="¿Qué criterio desea considerar a la hora del viaje? Sel
 
 criterio = '1'
 
-def toggleCriterio(event):
-    criterio =  seleccionadoCriterio.get()
-    print("criterio", criterio)
-
+def toggleCriterio():
+    criterio = seleccionadoCriterio.get()
+    return criterio
 opcionesCriterio = ['1', '2']
 
 seleccionadoCriterio = StringVar()
 seleccionadoCriterio.set(opcionesCriterio[0])
-seleccionadoCriterio_menu = OptionMenu(home, seleccionadoCriterio, *opcionesCriterio, command=toggleCriterio)
+seleccionadoCriterio_menu = OptionMenu(home, seleccionadoCriterio, *opcionesCriterio)
 seleccionadoCriterio_menu.pack()
 seleccionadoCriterio_menu.place(x="685", y="490")
 
@@ -188,15 +185,16 @@ toolbar.update()
 canvas.get_tk_widget().place(x="775", y="160")
 
 
-#METODO PARA EJECUTAR DIJKSTRA
+#METODO PARA EJECUTAR DIJKSTRA Y ENSEÑAR RESULTADO EN PANTALLA
 def ejecutarDijkstra():
 
-    frm = codigoOrigen
-    to = codigoDestino
-    route = criterio
-    visa = visaSelected
+    frm = asignaCodigoOrigen()
+    to = asignaCodigoDestino()
+    route = toggleCriterio()
+    visa = toggleVisa()
     #creamos el grafo:
     g = createGraph()
+    print("Datos del viaje", frm, ",", to, ",", route, ",", visa)
     if route == '1':
         # Se ejecuta el método correspondiente
         dijkstra_min_cost(g, g.get_vertex(frm), g.get_vertex(to), visa)
@@ -211,7 +209,6 @@ def ejecutarDijkstra():
     costo = []
     shortest(target, path, costo)
     path.reverse()
-
     # Mensaje de resultado para el usuario
 
     # Si el usuario elige como criterio el costo mínimo, el mensaje es
@@ -233,7 +230,7 @@ def ejecutarDijkstra():
             print(str(path[x]))
 
 
-# Boton para que lleva a la interfaz de seleccion de vuelo
+# Boton que lleva a la interfaz de seleccion de vuelo
 botonComenzar = Button(homeFrame, text="Buscar Viaje", width=25,height=1, bg="#B6CBDE", font=("Roboto", 10, "bold"), command=ejecutarDijkstra).place(x="600", y="540", anchor="center")
 
 
