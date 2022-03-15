@@ -23,9 +23,8 @@ home.iconbitmap("imagenes/Logo 2.ico")
 home.iconphoto(False, tk.PhotoImage(file='imagenes/Logo 2.png'))
 #Para que la ventana no sea redimensionable
 home.resizable(0, 0)
-# Scrollbar de la ventana
-scrollbar = Scrollbar(home)
-scrollbar.pack(side=RIGHT, fill=Y)
+
+
 
 
 #Configuración del frame que va a contener todos los widgets que se van a mostar en la interfaz gráfica
@@ -38,6 +37,25 @@ homeFrame.config(width="1200", height="795")
 logoImg = Image.open("imagenes/Logo 2.png")
 ajusteLogo = logoImg.resize((130, 130))
 logoAjustado = ImageTk.PhotoImage(ajusteLogo)
+
+#creando un canvas para poder hacer el scroll
+my_canvas = Canvas(home)
+my_canvas.pack(side = LEFT, fill=BOTH, expand = 1)
+
+
+# Scrollbar de la ventana
+scrollbar = Scrollbar(home)
+scrollbar.pack(side=RIGHT, fill=Y)
+
+#ahora configuramos el canvas
+my_canvas.configure(yscrollcommand=scrollbar.set)
+my_canvas.bind('<Configure>', lambda e: my_canvas.configure(scrollregion = my_canvas.bbox("all")))
+
+
+#ahora hacemos un nuevo frame dentro del canvas, es imperativo para que el scroll pueda funcionar
+segundoFrame = Frame(my_canvas)
+
+my_canvas.create_window((0, 0), window = segundoFrame, anchor='nw')
 
 
 #Etiquetas que se muestran en pantalla con mensajes de Bienvenida
