@@ -130,7 +130,7 @@ seleccionadoCriterio = StringVar()
 seleccionadoCriterio.set(opcionesCriterio[0])
 seleccionadoCriterio_menu = OptionMenu(home, seleccionadoCriterio, *opcionesCriterio, command=toggleCriterio)
 seleccionadoCriterio_menu.pack()
-seleccionadoCriterio_menu.place(x="675", y="325")
+seleccionadoCriterio_menu.place(x="685", y="490")
 
 
 #DIBUJANDO EL GRAFO COMPLETO
@@ -162,7 +162,7 @@ arcosGrafoDibujo = [
 ('AUA', 'SXM')
 ]
 
-figure= plt.figure(figsize=(1.5, 1.5), dpi=100)
+figure= plt.figure(figsize=(3.5, 3.5), dpi=100)
 plt.axis('off')
 subplot= figure.add_subplot(111)
 
@@ -173,7 +173,6 @@ nx.draw_networkx_nodes(grafoDibujo, pos, node_size=10)
 nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.2, edge_color='black', arrows="-")
 labels_params = {"font_size":5 }
 nx.draw_networkx_labels(grafoDibujo, pos, **labels_params)
-
 
 canvas = FigureCanvasTkAgg(figure,
                            master=home)
@@ -186,13 +185,7 @@ toolbar = NavigationToolbar2Tk(canvas, home)
 toolbar.update()
 
 # placing the toolbar on the Tkinter window
-# canvas.get_tk_widget().pack()
-canvas.get_tk_widget().place(x="975", y="100")
-# dibujo = FigureCanvasTkAgg(figure, home)
-#dibujo.get_tk_widget().grid(row=5, column=0)
-
-
-
+canvas.get_tk_widget().place(x="775", y="160")
 
 
 #METODO PARA EJECUTAR DIJKSTRA
