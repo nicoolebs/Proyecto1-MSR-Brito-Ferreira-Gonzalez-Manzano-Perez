@@ -6,11 +6,11 @@ from dijkstra import *
 from graph import *
 from node import *
 from data import *
-import networkx as nx
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
-
+import networkx as nx
+import matplotlib.pyplot as plt
+import tkinter as tk
 
 #Configuración inicial de la interfaz gráfica
 
@@ -20,8 +20,12 @@ home = Tk()
 home.title("Metro Travel")
 #Ícono
 home.iconbitmap("imagenes/Logo 2.ico")
+home.iconphoto(False, tk.PhotoImage(file='imagenes/Logo 2.png'))
 #Para que la ventana no sea redimensionable
 home.resizable(0, 0)
+# Scrollbar de la ventana
+scrollbar = Scrollbar(home)
+scrollbar.pack(side=RIGHT, fill=Y)
 
 
 #Configuración del frame que va a contener todos los widgets que se van a mostar en la interfaz gráfica
@@ -29,7 +33,6 @@ homeFrame = Frame()
 homeFrame.pack()
 homeFrame.config(bg="#f0ebe7")
 homeFrame.config(width="1200", height="795")
-
 
 #Conficuración de la imagen/logo de la ventana
 logoImg = Image.open("imagenes/Logo 2.png")
@@ -211,23 +214,98 @@ def ejecutarDijkstra():
     path.reverse()
     # Mensaje de resultado para el usuario
 
+    print(path)
+    grafoFinal = nx.Graph()
     # Si el usuario elige como criterio el costo mínimo, el mensaje es
     if target.get_distance() == 99999999999:
         print('')
     elif route == '1':
+        Label(homeFrame, text="El costo minimo de", fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="590")
+        Label(homeFrame, text=frm, fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="165", y="590")
+        Label(homeFrame, text="a", fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="210", y="590")
+        Label(homeFrame, text=to, fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="235", y="590")
+        Label(homeFrame, text="es de:", fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="280", y="590")
+        Label(homeFrame, text=target.get_distance(), fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="340", y="590")
+
         print('El costo mínimo de ' + frm + ' a ' + to + ' es de: $' + str(target.get_distance()))
         print('En este, el camino a tomar será: ')
         for x in range(len(path)):
+            grafoFinal.add_node(path[x])
+
+            if x < len(path)-1:
+                grafoFinal.add_edge(path[x],path[x+1])
+            else:
+                grafoFinal.add_edge(path[x-1], path[x])
+
             print(str(path[x]))
 
     # Si el usuario elige como criterio el número de vuelos mínimo
     else:
+
+        Label(homeFrame, text="El numero minimo de vuelos de", fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="590")
+        Label(homeFrame, text=frm, fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="165", y="590")
+        Label(homeFrame, text="a", fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="210", y="590")
+        Label(homeFrame, text=to, fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="235", y="590")
+        Label(homeFrame, text="es de:", fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="280", y="590")
+        Label(homeFrame, text=target.get_distance(), fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="340", y="590")
+        Label(homeFrame, text="el costo sera", fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="340", y="590")
+        Label(homeFrame, text=sum(costo), fg="#000000",
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="340", y="590")
+
         print(
             'El número mínimo de vuelos de ' + frm + ' a ' + to + ' es de ' + str(target.get_distance()) + ' vuelo-s-')
         print('Para este caso el costo de ' + frm + ' a ' + to + ' es de: $' + str(sum(costo)))
         print('En este, el camino a tomar será: ')
         for x in range(len(path)):
+
+            grafoFinal.add_node(path[x])
+
+            if x < len(path) - 1:
+                grafoFinal.add_edge(path[x], path[x + 1])
+            else:
+                grafoFinal.add_edge(path[x - 1], path[x])
+
             print(str(path[x]))
+
+    Label(homeFrame, text="La ruta que debe tomar para llegar a su destino es:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="560")
+    Label(homeFrame, text=path, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="560")
+
+    # GRAFO FINAL
+    figure = plt.figure(figsize=(3.5, 3.5), dpi=100)
+    plt.axis('off')
+    subplot = figure.add_subplot(111)
+
+    pos = nx.spring_layout(grafoFinal)
+    nx.draw_networkx_nodes(grafoFinal, pos, node_size=10)
+    nx.draw_networkx_edges(grafoFinal, pos, edgelist=grafoFinal.edges(), width=0.2, edge_color='black', arrows="-")
+    labels_params = {"font_size": 5}
+    nx.draw_networkx_labels(grafoFinal, pos, **labels_params)
+
+    canvas = FigureCanvasTkAgg(figure,
+                               master=home)
+    canvas.draw()
+
+    # placing the canvas on the Tkinter window
+    canvas.get_tk_widget().pack()
+
+    toolbar = NavigationToolbar2Tk(canvas, home)
+    toolbar.update()
+
+    # placing the toolbar on the Tkinter window
+    canvas.get_tk_widget().place(x="50", y="650")
 
 
 # Boton que lleva a la interfaz de seleccion de vuelo
