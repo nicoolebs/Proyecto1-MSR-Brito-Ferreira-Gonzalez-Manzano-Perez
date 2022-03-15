@@ -6,6 +6,10 @@ from dijkstra import *
 from graph import *
 from node import *
 from data import *
+import networkx as nx
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
 
 
 #Configuración inicial de la interfaz gráfica
@@ -126,7 +130,69 @@ seleccionadoCriterio = StringVar()
 seleccionadoCriterio.set(opcionesCriterio[0])
 seleccionadoCriterio_menu = OptionMenu(home, seleccionadoCriterio, *opcionesCriterio, command=toggleCriterio)
 seleccionadoCriterio_menu.pack()
-seleccionadoCriterio_menu.place(x="695", y="490")
+seleccionadoCriterio_menu.place(x="675", y="325")
+
+
+#DIBUJANDO EL GRAFO COMPLETO
+
+
+grafoDibujo = nx.Graph()
+grafoDatos = createGraph()
+
+arcosGrafoDibujo = [
+('CCS', 'AUA'),
+('CCS', 'CUR'),
+('CCS', 'BON'),
+('AUA', 'CUR'),
+('AUA', 'BON'),
+('CUR', 'BON'),
+('CCS', 'SDQ'),
+('SDQ', 'SXM'),
+('SXM', 'SBH'),
+('CCS', 'POS'),
+('CCS', 'BGI'),
+('POS', 'BGI'),
+('POS', 'SXM'),
+('BGI', 'SXM'),
+('POS', 'PTP'),
+('POS', 'FDF'),
+('PTP', 'SXM'),
+('PTP', 'SBH'),
+('CUR', 'SXM'),
+('AUA', 'SXM')
+]
+
+figure= plt.figure(figsize=(1.5, 1.5), dpi=100)
+plt.axis('off')
+subplot= figure.add_subplot(111)
+
+grafoDibujo.add_edges_from(arcosGrafoDibujo)
+
+pos = nx.spring_layout(grafoDibujo)
+nx.draw_networkx_nodes(grafoDibujo, pos, node_size=10)
+nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.2, edge_color='black', arrows="-")
+labels_params = {"font_size":5 }
+nx.draw_networkx_labels(grafoDibujo, pos, **labels_params)
+
+
+canvas = FigureCanvasTkAgg(figure,
+                           master=home)
+canvas.draw()
+
+# placing the canvas on the Tkinter window
+canvas.get_tk_widget().pack()
+
+toolbar = NavigationToolbar2Tk(canvas, home)
+toolbar.update()
+
+# placing the toolbar on the Tkinter window
+# canvas.get_tk_widget().pack()
+canvas.get_tk_widget().place(x="975", y="100")
+# dibujo = FigureCanvasTkAgg(figure, home)
+#dibujo.get_tk_widget().grid(row=5, column=0)
+
+
+
 
 
 #METODO PARA EJECUTAR DIJKSTRA
