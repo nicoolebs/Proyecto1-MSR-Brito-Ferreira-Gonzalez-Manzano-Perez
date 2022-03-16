@@ -5,7 +5,7 @@ import sys
 class Vertex:
     def __init__(self, id, city, visa):
 
-        #Código, ciudad, y si requiere visa o no para visitar de cada ciudad
+        #Código, ciudad, y si requiere visa o no para visitar cada ciudad
         self.id = id
         self.city = city
         self.visa = visa

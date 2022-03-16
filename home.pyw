@@ -11,51 +11,34 @@ from matplotlib.figure import Figure
 import networkx as nx
 import matplotlib.pyplot as plt
 import tkinter as tk
+import matplotlib as mpl
 
-#Configuración inicial de la interfaz gráfica
+
+#Configuración de la interfaz gráfica
 
 #Creación de la ventana
 home = Tk()
+
 #Título de la ventana
 home.title("Metro Travel")
-#Ícono
+
+#Ícono de la ventana
 home.iconbitmap("imagenes/Logo 2.ico")
 home.iconphoto(False, tk.PhotoImage(file='imagenes/Logo 2.png'))
+
 #Para que la ventana no sea redimensionable
 home.resizable(0, 0)
-
-
-
 
 #Configuración del frame que va a contener todos los widgets que se van a mostar en la interfaz gráfica
 homeFrame = Frame()
 homeFrame.pack()
 homeFrame.config(bg="#f0ebe7")
-homeFrame.config(width="1200", height="795")
+homeFrame.config(width="1300", height="700")
 
-#Conficuración de la imagen/logo de la ventana
+#Configuración de la imagen/logo que sale en la ventana
 logoImg = Image.open("imagenes/Logo 2.png")
-ajusteLogo = logoImg.resize((130, 130))
+ajusteLogo = logoImg.resize((150, 150))
 logoAjustado = ImageTk.PhotoImage(ajusteLogo)
-
-#creando un canvas para poder hacer el scroll
-my_canvas = Canvas(home)
-my_canvas.pack(side = LEFT, fill=BOTH, expand = 1)
-
-
-# Scrollbar de la ventana
-scrollbar = Scrollbar(home)
-scrollbar.pack(side=RIGHT, fill=Y)
-
-#ahora configuramos el canvas
-my_canvas.configure(yscrollcommand=scrollbar.set)
-my_canvas.bind('<Configure>', lambda e: my_canvas.configure(scrollregion = my_canvas.bbox("all")))
-
-
-#ahora hacemos un nuevo frame dentro del canvas, es imperativo para que el scroll pueda funcionar
-segundoFrame = Frame(my_canvas)
-
-my_canvas.create_window((0, 0), window = segundoFrame, anchor='nw')
 
 
 #Etiquetas que se muestran en pantalla con mensajes de Bienvenida
@@ -68,29 +51,33 @@ Label(homeFrame, text="En Metro Travel nos especializamos en viajes desde "
 
 #Etiqueta e imagen que muestran los destinos de la agencia
 Label(homeFrame, text="Destinos que ofrecemos:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="150", y="170", anchor="center")
+#Configuración de imagen de destinos
 destinosImg = Image.open("imagenes/Destinos del Proyecto.png")
 ajusteDesti = destinosImg.resize((550, 190))
 destAjustado = ImageTk.PhotoImage(ajusteDesti)
 Label(homeFrame, image=destAjustado, bg="#f0ebe7").place(x="290", y="280",anchor='center')
 
 
-#COMBOBOXES PARA ELEGIR LA CIUDAD DE ORIGEN Y DESTINO
+#Comboboxes para que el usuario seleccione la ciudad de origen y destino deseadas 
 
-#Ciudades disponibles
+#Ciudades disponibles de la agencia con su nombre y código
 ciudades = ['Caracas - CCS', 'Aruba - AUA', 'Bonaire - BON', 'Curazao - CUR', 'San Martín - SXM', 'Santo Domingo - SDQ', 'San Bartolomé - SBH','Puerto España - POS','Barbados - BGI','Fort de France - FDF','Point a Pitre - PTP']
-#Etiqueta y Combobox señalando selección de origen
+
+#Etiqueta y Combobox para identificar y seleccionar la ciudad de origen
 Label(homeFrame, text="Por favor, seleccione el código del aeropuerto de la ciudad de origen:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="385")
 codigoOrigen = ciudades[0][-3:]
-#Etiqueta y Combobox señalando selección de origen
-Label(homeFrame, text="Por favor, seleccione el código del aeropuerto de la ciudad de destino:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="425")
-codigoDestino = ciudades[1][-3:]
 
-#Métodos que guardan los códigos de las cuidades de origen y destino
+#Etiqueta y Combobox para identificar y seleccionar la ciudad de destino
+Label(homeFrame, text="Por favor, seleccione el código del aeropuerto de la ciudad de destino:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="425")
+codigoDestino = ciudades[1][-3:] 
+
+#Método que guarda el código de la ciudad de origen
 def asignaCodigoOrigen():
     codigo = str(seleccionadoOrigen.get())
     codigoOrigen = codigo[-3:]
     return codigoOrigen
 
+#Método que guarda el código de la ciudad de destino
 def asignaCodigoDestino():
     codigo = str(seleccionadoDestino.get())
     codigoDestino = codigo[-3:]
@@ -106,15 +93,17 @@ seleccionadoDestino.set(ciudades[1])
 ciudadDestino_menu = OptionMenu(home, seleccionadoDestino, *ciudades)
 ciudadDestino_menu.pack()
 
-#Ubicando los dropdowns de la interfaz
+#Ubicando los comboboxes en la interfaz
 ciudadOrigen_menu.place(x="470", y="385")
 ciudadDestino_menu.place(x="470", y="425")
 
 
-#SELECCIONANDO SI EL CLIENTE TIENE VISA O NO
+#Apartado para que el usuario seleccione si TIENE o NO el documento visa
+
 #Etiqueta señalando que indique si tiene o no el documento
 Label(homeFrame, text="¿Posee usted VISA?", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="460")
 
+#Inicialización del btn en tiene visa
 visaSelected = True
 
 def toggleVisa():
@@ -123,40 +112,49 @@ def toggleVisa():
     else:
         return False
 
-
+#Opciones para el usuario -tiene o no tiene visa-
 opcionesVisas = ["Si", "No"]
 
 seleccionadoVisa = StringVar()
 seleccionadoVisa.set(opcionesVisas[0])
 seleccionadoVisa_menu = OptionMenu(home, seleccionadoVisa, *opcionesVisas)
 seleccionadoVisa_menu.pack()
+
+#Ubicación del Btn con la opción de seleccionar si tiene o no visa
 seleccionadoVisa_menu.place(x="160", y="460")
 
 
-#SELECCIONANDO SI EL CLIENTE QUIERE EL COSTO O NUMERO DE VUELOS MINIMOS
-#Etiqueta señalando que indique si tiene o no el documento
-Label(homeFrame, text="¿Qué criterio desea considerar a la hora del viaje? Seleccione 1.- Costo mínimo ó 2.- Número de vuelos mínimo", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="490")
+#Apartado para que el usuario seleccione si quiere cumplir su viaje con el criterio de Costo Mínimo o el criterio de Vuelos Mínimos
 
-criterio = '1'
+#Etiqueta señalando que indique si tiene o no el documento
+Label(homeFrame, text="¿Qué criterio desea considerar a la hora del viaje?", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="490")
+
+#Inicialización del btn en criteri costo mínimo
+criterio = 'Costo mínimo'
 
 def toggleCriterio():
     criterio = seleccionadoCriterio.get()
     return criterio
-opcionesCriterio = ['1', '2']
+
+#Opciones para el usuario -quiere viajar con costo mínimo o vuelos mínimos-  
+opcionesCriterio = ['Costo mínimo', 'Vuelos mínimos']
 
 seleccionadoCriterio = StringVar()
 seleccionadoCriterio.set(opcionesCriterio[0])
 seleccionadoCriterio_menu = OptionMenu(home, seleccionadoCriterio, *opcionesCriterio)
 seleccionadoCriterio_menu.pack()
-seleccionadoCriterio_menu.place(x="685", y="490")
+
+#Ubicación del Btn con la opción del criterio
+seleccionadoCriterio_menu.place(x="330", y="490")
 
 
-#DIBUJANDO EL GRAFO COMPLETO
+#Dibujando el Grafo Inicial completo sin los vuelos a realizar
 
-
+#Creación del grafo a dibujar
 grafoDibujo = nx.Graph()
 grafoDatos = createGraph()
 
+#Arcos del grafo a dibujar -no dirigido-
 arcosGrafoDibujo = [
 ('CCS', 'AUA'),
 ('CCS', 'CUR'),
@@ -180,132 +178,131 @@ arcosGrafoDibujo = [
 ('AUA', 'SXM')
 ]
 
-figure= plt.figure(figsize=(3.5, 3.5), dpi=100)
+#Configuración de la figura a generar
+figure= plt.figure(figsize=(4, 4), dpi=100)
 plt.axis('off')
 subplot= figure.add_subplot(111)
 
+#Agregando al grafo a dibujar las aristas
 grafoDibujo.add_edges_from(arcosGrafoDibujo)
 
+#Dibujando el grafo con sus respectivas configuraciones de tamaño, color, etc
 pos = nx.spring_layout(grafoDibujo)
-nx.draw_networkx_nodes(grafoDibujo, pos, node_size=10)
-nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.2, edge_color='black', arrows="-")
-labels_params = {"font_size": 5}
+nx.draw_networkx_nodes(grafoDibujo, pos, node_size=100, node_color='#8EB2D5')
+nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.5, edge_color='black', arrows="-")
+labels_params = {"font_size": 10}
 nx.draw_networkx_labels(grafoDibujo, pos, **labels_params)
-
-canvas = FigureCanvasTkAgg(figure,
-                           master=home)
+canvas = FigureCanvasTkAgg(figure,master=home)
 canvas.draw()
 
-# placing the canvas on the Tkinter window
+#Colocando el dibujo en la ventana de Tkinter
 canvas.get_tk_widget().pack()
-
 toolbar = NavigationToolbar2Tk(canvas, home)
 toolbar.update()
+canvas.get_tk_widget().place(x="790", y="150")
 
-# placing the toolbar on the Tkinter window
-canvas.get_tk_widget().place(x="775", y="160")
 
-#LA FUNCION QUE HACE QUE SE VUELVA A PINTAR EL GRAFO 
+#Función que hace que se vuelva a pintar el grafo si se selecciona un vuelo a realizar
 def pintarGrafo(path):
+    #Colores para nodos
     colors=[]
-
+    #Lista de Ciudades con las que se trabaja
     listaCiudades = ["CCS", "AUA", "CUR", "BON", "SDQ", "SXM", "SBH", "POS", "BGI", "PTP", "FDF"]
 
-    #EL FOR QUE TENEMOS QUE HACER DINAMICO
+    #Bandera
     found = False
+
+    #Fores que permiten establecer los colores de los nodos si fueron seleccionados como parte del viaje del usuario
     for ciudad in listaCiudades:
-        print("COLOOOOOR", colors)
         for ciudad_path in path:
+            #Si la ciudad se visita para realizar el viaje se pinta de color rojo el nodo
             if ciudad == ciudad_path:
-                colors.append('red')
+                colors.append('#D33457')
                 found = True
                 continue
         if found:
             found = False
             continue
+        #Si no es asi, se deja del color inicial
         else:
-            colors.append('black')
+            colors.append('#8EB2D5')
 
+    #Lista de los arcos entre ciudades que se maneja
     arcos = [('CCS', 'AUA'), ('CCS', 'CUR'), ('CCS', 'BON'), ('CCS', 'SDQ'), ('CCS', 'POS'), ('CCS', 'BGI'), ('AUA', 'CUR'), ('AUA', 'BON'), ('AUA', 'SXM'), ('CUR', 'BON'), ('CUR', 'SXM'), ('SDQ', 'SXM'), ('SXM', 'SBH'), ('SXM', 'POS'), ('SXM', 'BGI'), ('SXM', 'PTP'), ('SBH', 'PTP'), ('POS', 'BGI'), ('POS', 'PTP'), ('POS', 'FDF')]
+    #Colores para nodos
     colors_e = []
-
+    
+    #Segunda Bandera
     found_e = False
-    print(grafoDibujo.edges)
 
+    #Fores que permiten establecer los colores de los arcos si son parte del viaje del usuario
     for x in range(len(arcos)):
-
         for y in range(len(path) - 1):
-
-            print((path[y], path[y + 1]))
-            print((path[y+1], path[y + 1]))
-
+            #Si ese arco se utiliza para llegar el destino deseado se pinta de rojo
             if arcos[x] == (path[y], path[y + 1]) or arcos[x] == (path[y + 1], path[y]):
-                colors_e.append('red')
-                print('red', arcos[x])
+                colors_e.append('#D33457')
                 found_e = True
                 continue
-            
         if found_e:
             found_e = False
             continue
+        #Si no es asi, se deja del color inicial
         else:
             print('black', arcos[x])
             colors_e.append('black')
             
-
-    nx.draw_networkx_nodes(grafoDibujo, pos, node_color=colors, node_size=10)
-    nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.3, edge_color=colors_e, arrows="-")
-    labels_params = {"font_size": 5}
+    #Dibujando el grafo con sus respectivas configuraciones de tamaño, color, etc
+    nx.draw_networkx_nodes(grafoDibujo, pos, node_color=colors, node_size=100)
+    nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.9, edge_color=colors_e, arrows="-")
+    labels_params = {"font_size": 10}
     nx.draw_networkx_labels(grafoDibujo, pos, **labels_params)
 
-    canvas = FigureCanvasTkAgg(figure,
-                               master=home)
+    canvas = FigureCanvasTkAgg(figure, master=home)
     canvas.draw()
 
-    # placing the canvas on the Tkinter window
+    #Colocando el dibujo en la ventana de Tkinter
     canvas.get_tk_widget().pack()
-
     toolbar = NavigationToolbar2Tk(canvas, home)
     toolbar.update()
-
-    # placing the toolbar on the Tkinter window
-    canvas.get_tk_widget().place(x="775", y="160")
+    canvas.get_tk_widget().place(x="790", y="150")
 
 
-
-
-#METODO PARA EJECUTAR DIJKSTRA Y ENSEÑAR RESULTADO EN PANTALLA
+#Método que permite ejecutar Dijkstra y mostrar los resultados en la interfaz
 def ejecutarDijkstra():
 
+    #Guardando el origen, destino, el criterio y si se posee o no la visa
     frm = asignaCodigoOrigen()
     to = asignaCodigoDestino()
     route = toggleCriterio()
     visa = toggleVisa()
-    #creamos el grafo:
+
+    #Se crea el grafo
     g = createGraph()
-    print("Datos del viaje", frm, ",", to, ",", route, ",", visa)
-    if route == '1':
+
+    #Si el criterio seleccionado fue el del costo mínimo
+    if route == 'Costo mínimo':
         # Se ejecuta el método correspondiente
         dijkstra_min_cost(g, g.get_vertex(frm), g.get_vertex(to), visa)
-        # Sino, si el usuario elige como criterio el número de vuelos mínimo
+        #Sino, si el usuario elige como criterio el número de vuelos mínimo
     else:
-        # Se ejecuta el método correspondiente
+        #Por ello, se ejecuta el método correspondiente
         dijkstra_min_steps(g, g.get_vertex(frm), g.get_vertex(to), visa)
 
-        # Reconstruir el camino obtenido por el método correspondiente
+    #Reconstruir el camino obtenido por el método correspondiente
     target = g.get_vertex(to)
     path = [target.get_id()]
     costo = []
     shortest(target, path, costo)
     path.reverse()
-    # Mensaje de resultado para el usuario
 
+    #Mensaje de resultado para el usuario
     print(path)
     grafoFinal = nx.Graph()
-    # Si el usuario elige como criterio el costo mínimo, el mensaje es
+
+    #Si el usuario elige como criterio el costo mínimo, el mensaje es
     if target.get_distance() == 99999999999:
         print('')
-    elif route == '1':
+    elif route == 'Costo mínimo':
         Label(homeFrame, text="El costo minimo de", fg="#000000",
               font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="590")
         Label(homeFrame, text=frm, fg="#000000",
@@ -319,9 +316,10 @@ def ejecutarDijkstra():
         Label(homeFrame, text=target.get_distance(), fg="#000000",
               font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="345", y="590")
 
+        #Se pinta el grafo con los resultados
         pintarGrafo(path)
 
-    # Si el usuario elige como criterio el número de vuelos mínimo
+    #Si el usuario elige como criterio el número de vuelos mínimo
     else:
         
         Label(homeFrame, text="El numero minimo de vuelos de", fg="#000000",
@@ -341,27 +339,22 @@ def ejecutarDijkstra():
         Label(homeFrame, text=sum(costo), fg="#000000",
               font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
 
+        #Se pinta el grafo con los resultados
         pintarGrafo(path)
 
-
+    #Datos finales que mostrar en interfaz de la búsqueda del vuelo
     Label(homeFrame, text="La ruta que debe tomar para llegar a su destino es:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="560")
     Label(homeFrame, text=path, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="560")
 
-
-
-
-    # placing the canvas on the Tkinter window
+    #Colocando el dibujo del grafo con los resultados en la ventana de Tkinter
     canvas.get_tk_widget().pack()
-
     toolbar = NavigationToolbar2Tk(canvas, home)
     toolbar.update()
-
-    # placing the toolbar on the Tkinter window
-    canvas.get_tk_widget().place(x="50", y="650")
+    canvas.get_tk_widget().place(x="775", y="150")
 
 
-# Boton que lleva a la interfaz de seleccion de vuelo
-botonComenzar = Button(homeFrame, text="Buscar Viaje", width=25,height=1, bg="#B6CBDE", font=("Roboto", 10, "bold"), command=ejecutarDijkstra).place(x="600", y="540", anchor="center")
+#Boton que lleva a la seleccion de vuelo
+botonComenzar = Button(homeFrame, text="Buscar Viaje", width=25,height=1, bg="#B6CBDE", font=("Roboto", 10, "bold"), command=ejecutarDijkstra).place(x="600", y="580", anchor="center")
 
 
 home.mainloop()
