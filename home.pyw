@@ -209,26 +209,25 @@ canvas.get_tk_widget().place(x="775", y="160")
 def pintarGrafo(path):
     colors=[]
 
-    listaCiudades = [
-        "CCS",
-        "AUA",
-        "BON",
-        "CUR",
-        "SXM",
-        "SDQ",
-        "SBH",
-        "POS",
-        "BGI",
-        "FDF",
-        "PTP"
-    ]
+    listaCiudades = ["CCS", "AUA", "CUR", "BON", "SDQ", "SXM", "SBH", "POS", "BGI", "PTP", "FDF"]
 
     #EL FOR QUE TENEMOS QUE HACER DINAMICO
+    found = False
     for ciudad in listaCiudades:
-        if ciudad == path[0] or ciudad == path[1]:
-            colors.append('red')
+        print("COLOOOOOR", colors)
+        for ciudad_path in path:
+            if ciudad == ciudad_path:
+                colors.append('red')
+                found = True
+                continue
+        if found:
+            found = False
+            continue
         else:
             colors.append('black')
+
+
+    print("nodos", grafoDibujo.nodes)
 
     nx.draw_networkx_nodes(grafoDibujo, pos, node_color=colors, node_size=10)
     nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.2, edge_color='black', arrows="-")
