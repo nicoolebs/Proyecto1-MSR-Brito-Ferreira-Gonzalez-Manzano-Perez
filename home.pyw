@@ -205,7 +205,7 @@ toolbar.update()
 # placing the toolbar on the Tkinter window
 canvas.get_tk_widget().place(x="775", y="160")
 
-#LA FUNCION QUE HACE QUE SE VUELVA A PINTAR EL GRAFO (HAY QUE PONERLO QUE SE PONGA ENCIMA)
+#LA FUNCION QUE HACE QUE SE VUELVA A PINTAR EL GRAFO 
 def pintarGrafo(path):
     colors=[]
 
@@ -226,37 +226,35 @@ def pintarGrafo(path):
         else:
             colors.append('black')
 
+    arcos = [('CCS', 'AUA'), ('CCS', 'CUR'), ('CCS', 'BON'), ('CCS', 'SDQ'), ('CCS', 'POS'), ('CCS', 'BGI'), ('AUA', 'CUR'), ('AUA', 'BON'), ('AUA', 'SXM'), ('CUR', 'BON'), ('CUR', 'SXM'), ('SDQ', 'SXM'), ('SXM', 'SBH'), ('SXM', 'POS'), ('SXM', 'BGI'), ('SXM', 'PTP'), ('SBH', 'PTP'), ('POS', 'BGI'), ('POS', 'PTP'), ('POS', 'FDF')]
     colors_e = []
 
     found_e = False
     print(grafoDibujo.edges)
 
-    for x in range(len(arcosGrafoDibujo)):
-
-        found_e2 = True
+    for x in range(len(arcos)):
 
         for y in range(len(path) - 1):
 
             print((path[y], path[y + 1]))
-            print((path[y+1], path[y]))
+            print((path[y+1], path[y + 1]))
 
-            if arcosGrafoDibujo[x] == (path[y], path[y + 1]) or arcosGrafoDibujo[x] == (path[y + 1], path[y]):
+            if arcos[x] == (path[y], path[y + 1]) or arcos[x] == (path[y + 1], path[y]):
                 colors_e.append('red')
-                print('red', arcosGrafoDibujo[x])
+                print('red', arcos[x])
                 found_e = True
                 continue
-            if found_e:
-                found_e = False
-                continue
-            else:
-                if found_e2:
-                    print('black', arcosGrafoDibujo[x])
-                    found_e2 = False
-                    colors_e.append('black')
+            
+        if found_e:
+            found_e = False
+            continue
+        else:
+            print('black', arcos[x])
+            colors_e.append('black')
             
 
     nx.draw_networkx_nodes(grafoDibujo, pos, node_color=colors, node_size=10)
-    nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.2, edge_color=colors_e, arrows="-")
+    nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.3, edge_color=colors_e, arrows="-")
     labels_params = {"font_size": 5}
     nx.draw_networkx_labels(grafoDibujo, pos, **labels_params)
 
@@ -271,7 +269,7 @@ def pintarGrafo(path):
     toolbar.update()
 
     # placing the toolbar on the Tkinter window
-    canvas.get_tk_widget().place(x="50", y="160")
+    canvas.get_tk_widget().place(x="775", y="160")
 
 
 
@@ -316,59 +314,32 @@ def ejecutarDijkstra():
               font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="210", y="590")
         Label(homeFrame, text=to, fg="#000000",
               font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="235", y="590")
-        Label(homeFrame, text="es de:", fg="#000000",
+        Label(homeFrame, text="es de: $", fg="#000000",
               font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="280", y="590")
         Label(homeFrame, text=target.get_distance(), fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="340", y="590")
-
-        print('El costo mínimo de ' + frm + ' a ' + to + ' es de: $' + str(target.get_distance()))
-        print('En este, el camino a tomar será: ')
-        for x in range(len(path)):
-            grafoFinal.add_node(path[x])
-
-            if x < len(path)-1:
-                grafoFinal.add_edge(path[x],path[x+1])
-            else:
-                grafoFinal.add_edge(path[x-1], path[x])
-
-            print(str(path[x]))
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="345", y="590")
 
         pintarGrafo(path)
 
     # Si el usuario elige como criterio el número de vuelos mínimo
     else:
-
+        
         Label(homeFrame, text="El numero minimo de vuelos de", fg="#000000",
               font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="590")
         Label(homeFrame, text=frm, fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="165", y="590")
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="260", y="590")
         Label(homeFrame, text="a", fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="210", y="590")
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
         Label(homeFrame, text=to, fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="235", y="590")
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
         Label(homeFrame, text="es de:", fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="280", y="590")
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
         Label(homeFrame, text=target.get_distance(), fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="340", y="590")
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
         Label(homeFrame, text="el costo sera", fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="340", y="590")
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
         Label(homeFrame, text=sum(costo), fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="340", y="590")
-
-        print(
-            'El número mínimo de vuelos de ' + frm + ' a ' + to + ' es de ' + str(target.get_distance()) + ' vuelo-s-')
-        print('Para este caso el costo de ' + frm + ' a ' + to + ' es de: $' + str(sum(costo)))
-        print('En este, el camino a tomar será: ')
-        for x in range(len(path)):
-
-            grafoFinal.add_node(path[x])
-
-            if x < len(path) - 1:
-                grafoFinal.add_edge(path[x], path[x + 1])
-            else:
-                grafoFinal.add_edge(path[x - 1], path[x])
-
-            print(str(path[x]))
+              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
 
         pintarGrafo(path)
 
@@ -376,20 +347,6 @@ def ejecutarDijkstra():
     Label(homeFrame, text="La ruta que debe tomar para llegar a su destino es:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="560")
     Label(homeFrame, text=path, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="560")
 
-    # GRAFO FINAL
-    figure = plt.figure(figsize=(3.5, 3.5), dpi=100)
-    plt.axis('off')
-    subplot = figure.add_subplot(111)
-
-    pos = nx.spring_layout(grafoFinal)
-    nx.draw_networkx_nodes(grafoFinal, pos, node_size=10)
-    nx.draw_networkx_edges(grafoFinal, pos, edgelist=grafoFinal.edges(), width=0.2, edge_color='black', arrows="-")
-    labels_params = {"font_size": 5}
-    nx.draw_networkx_labels(grafoFinal, pos, **labels_params)
-
-    canvas = FigureCanvasTkAgg(figure,
-                               master=home)
-    canvas.draw()
 
 
 
