@@ -64,11 +64,11 @@ Label(homeFrame, image=destAjustado, bg="#f0ebe7").place(x="290", y="280",anchor
 ciudades = ['Caracas - CCS', 'Aruba - AUA', 'Bonaire - BON', 'Curazao - CUR', 'San Martín - SXM', 'Santo Domingo - SDQ', 'San Bartolomé - SBH','Puerto España - POS','Barbados - BGI','Fort de France - FDF','Point a Pitre - PTP']
 
 #Etiqueta y Combobox para identificar y seleccionar la ciudad de origen
-Label(homeFrame, text="Por favor, seleccione el código del aeropuerto de la ciudad de origen:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="385")
+Label(homeFrame, text="Por favor, seleccione el código de la ciudad de origen:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="385")
 codigoOrigen = ciudades[0][-3:]
 
 #Etiqueta y Combobox para identificar y seleccionar la ciudad de destino
-Label(homeFrame, text="Por favor, seleccione el código del aeropuerto de la ciudad de destino:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="425")
+Label(homeFrame, text="Por favor, seleccione el código de la ciudad de destino:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="425")
 codigoDestino = ciudades[1][-3:] 
 
 #Método que guarda el código de la ciudad de origen
