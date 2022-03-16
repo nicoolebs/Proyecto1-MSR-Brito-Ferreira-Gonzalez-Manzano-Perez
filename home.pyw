@@ -37,7 +37,7 @@ homeFrame.config(width="1300", height="700")
 
 #Configuración de la imagen/logo que sale en la ventana
 logoImg = Image.open("imagenes/Logo 2.png")
-ajusteLogo = logoImg.resize((150, 150))
+ajusteLogo = logoImg.resize((130, 130))
 logoAjustado = ImageTk.PhotoImage(ajusteLogo)
 
 
@@ -94,8 +94,8 @@ ciudadDestino_menu = OptionMenu(home, seleccionadoDestino, *ciudades)
 ciudadDestino_menu.pack()
 
 #Ubicando los comboboxes en la interfaz
-ciudadOrigen_menu.place(x="470", y="385")
-ciudadDestino_menu.place(x="470", y="425")
+ciudadOrigen_menu.place(x="490", y="385")
+ciudadDestino_menu.place(x="490", y="425")
 
 
 #Apartado para que el usuario seleccione si TIENE o NO el documento visa
@@ -121,7 +121,7 @@ seleccionadoVisa_menu = OptionMenu(home, seleccionadoVisa, *opcionesVisas)
 seleccionadoVisa_menu.pack()
 
 #Ubicación del Btn con la opción de seleccionar si tiene o no visa
-seleccionadoVisa_menu.place(x="470", y="460")
+seleccionadoVisa_menu.place(x="490", y="460")
 
 
 #Apartado para que el usuario seleccione si quiere cumplir su viaje con el criterio de Costo Mínimo o el criterio de Vuelos Mínimos
@@ -145,7 +145,7 @@ seleccionadoCriterio_menu = OptionMenu(home, seleccionadoCriterio, *opcionesCrit
 seleccionadoCriterio_menu.pack()
 
 #Ubicación del Btn con la opción del criterio
-seleccionadoCriterio_menu.place(x="470", y="490")
+seleccionadoCriterio_menu.place(x="490", y="490")
 
 
 #Dibujando el Grafo Inicial completo sin los vuelos deseados por el usuario a realizar
@@ -268,10 +268,10 @@ def pintarGrafo(path):
 #Declaración de labels que cambiarán dependiendo del resultado generado por el usuario
 #Label que indica el camino/vuelos/escalas
 label_camino = tk.Label(homeFrame, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7")
-label_camino.place(x="15", y="595")
+label_camino.place(x="15", y="600")
 #Label que indica el costo, número min de vuelos, etc
 label_respuesta = tk.Label(homeFrame, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7")
-label_respuesta.place(x="15", y="615")
+label_respuesta.place(x="15", y="620")
 
 #Método que permite ejecutar Dijkstra y mostrar los resultados en la interfaz
 def ejecutarDijkstra():
