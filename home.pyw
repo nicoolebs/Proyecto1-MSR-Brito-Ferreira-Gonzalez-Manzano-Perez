@@ -266,6 +266,10 @@ def pintarGrafo(path):
     toolbar.update()
     canvas.get_tk_widget().place(x="790", y="150")
 
+label_camino = tk.Label(homeFrame, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7")
+label_camino.place(x="10", y="560")
+label_respuesta = tk.Label(homeFrame, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7")
+label_respuesta.place(x="10", y="590")
 
 #Método que permite ejecutar Dijkstra y mostrar los resultados en la interfaz
 def ejecutarDijkstra():
@@ -275,86 +279,71 @@ def ejecutarDijkstra():
     to = asignaCodigoDestino()
     route = toggleCriterio()
     visa = toggleVisa()
-
-    #Se crea el grafo
+    respuesta = ''
+    camino = ''
+    global label_camino
+    global label_respuesta
     g = createGraph()
 
-    #Si el criterio seleccionado fue el del costo mínimo
-    if route == 'Costo mínimo':
-        # Se ejecuta el método correspondiente
-        dijkstra_min_cost(g, g.get_vertex(frm), g.get_vertex(to), visa)
-        #Sino, si el usuario elige como criterio el número de vuelos mínimo
+    if frm == to:
+
+        respuesta = 'La ciudad de origen no puede ser igual a la ciudad de destino.'
+
+    elif g.get_vertex(to).visa == True and visa == False:
+
+		#Mensaje para los que no tienen visa y la ciudad la pide para ingresar
+        respuesta = 'Lo sentimos, usted no tiene VISA para ingresar a la ciudad de destino deseada.\n Por ello no podemos ofrecerle la ruta indicada.'
+	
     else:
-        #Por ello, se ejecuta el método correspondiente
-        dijkstra_min_steps(g, g.get_vertex(frm), g.get_vertex(to), visa)
+        #Se crea el grafo
 
-    #Reconstruir el camino obtenido por el método correspondiente
-    target = g.get_vertex(to)
-    path = [target.get_id()]
-    costo = []
-    shortest(target, path, costo)
-    path.reverse()
+        #Si el criterio seleccionado fue el del costo mínimo
+        if route == 'Costo mínimo':
+            # Se ejecuta el método correspondiente
+            dijkstra_min_cost(g, g.get_vertex(frm), g.get_vertex(to), visa)
+            #Sino, si el usuario elige como criterio el número de vuelos mínimo
+        else:
+            #Por ello, se ejecuta el método correspondiente
+            dijkstra_min_steps(g, g.get_vertex(frm), g.get_vertex(to), visa)
 
-    #Mensaje de resultado para el usuario
-    print(path)
-    grafoFinal = nx.Graph()
+        #Reconstruir el camino obtenido por el método correspondiente
+        target = g.get_vertex(to)
+        path = [target.get_id()]
+        costo = []
+        shortest(target, path, costo)
+        path.reverse()
 
-    #Si el usuario elige como criterio el costo mínimo, el mensaje es
-    if target.get_distance() == 99999999999:
-        print('')
-    elif route == 'Costo mínimo':
-        Label(homeFrame, text="El costo minimo de", fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="590")
-        Label(homeFrame, text=frm, fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="165", y="590")
-        Label(homeFrame, text="a", fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="210", y="590")
-        Label(homeFrame, text=to, fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="235", y="590")
-        Label(homeFrame, text="es de: $", fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="280", y="590")
-        Label(homeFrame, text=target.get_distance(), fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="345", y="590")
+        #Mensaje de resultado para el usuario
+        print(path)
+        grafoFinal = nx.Graph()
+
+        #Si no hay camino entre las dos ciudades
+        if target.get_distance() == 99999999999:
+            respuesta = 'No hay camino entre ' + str(frm) + ' y ' + str(to) + ' intente cambiando las condiciones de vuelo.'
+        #Si el usuario elige como criterio el costo mínimo, el mensaje es
+        elif route == 'Costo mínimo':
+            respuesta = 'El costo mínimo de ' + str(frm) + ' a ' + str(to) + ' es de $ ' + str(target.get_distance()) + '.'
+        #Si el usuario elige como criterio el número de vuelos mínimo
+        else:
+            respuesta = 'El costo de ' + str(frm) + ' a ' + str(to) + ' es de $ ' + str(sum(costo)) + ' y el número mínimo de vuelos es de ' + str(target.get_distance()) + ' vuelos.'
 
         #Se pinta el grafo con los resultados
         pintarGrafo(path)
 
-    #Si el usuario elige como criterio el número de vuelos mínimo
-    else:
-        
-        Label(homeFrame, text="El numero minimo de vuelos de", fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="590")
-        Label(homeFrame, text=frm, fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="260", y="590")
-        Label(homeFrame, text="a", fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
-        Label(homeFrame, text=to, fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
-        Label(homeFrame, text="es de:", fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
-        Label(homeFrame, text=target.get_distance(), fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
-        Label(homeFrame, text="el costo sera", fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
-        Label(homeFrame, text=sum(costo), fg="#000000",
-              font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="590")
+        camino = "La ruta que debe tomar para llegar a su destino es: " + str(path)
+        #Datos finales que mostrar en interfaz de la búsqueda del vuelo
 
-        #Se pinta el grafo con los resultados
-        pintarGrafo(path)
+        #Colocando el dibujo del grafo con los resultados en la ventana de Tkinter
+        canvas.get_tk_widget().pack()
+        toolbar = NavigationToolbar2Tk(canvas, home)
+        toolbar.update()
+        canvas.get_tk_widget().place(x="775", y="150")
 
-    #Datos finales que mostrar en interfaz de la búsqueda del vuelo
-    Label(homeFrame, text="La ruta que debe tomar para llegar a su destino es:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="560")
-    Label(homeFrame, text=path, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="560")
-
-    #Colocando el dibujo del grafo con los resultados en la ventana de Tkinter
-    canvas.get_tk_widget().pack()
-    toolbar = NavigationToolbar2Tk(canvas, home)
-    toolbar.update()
-    canvas.get_tk_widget().place(x="775", y="150")
+    label_camino.config(text = camino)
+    label_respuesta.config(text = respuesta)
 
 
 #Boton que lleva a la seleccion de vuelo
 botonComenzar = Button(homeFrame, text="Buscar Viaje", width=25,height=1, bg="#B6CBDE", font=("Roboto", 10, "bold"), command=ejecutarDijkstra).place(x="600", y="580", anchor="center")
-
 
 home.mainloop()
