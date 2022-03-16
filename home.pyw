@@ -121,7 +121,7 @@ seleccionadoVisa_menu = OptionMenu(home, seleccionadoVisa, *opcionesVisas)
 seleccionadoVisa_menu.pack()
 
 #Ubicación del Btn con la opción de seleccionar si tiene o no visa
-seleccionadoVisa_menu.place(x="160", y="460")
+seleccionadoVisa_menu.place(x="470", y="460")
 
 
 #Apartado para que el usuario seleccione si quiere cumplir su viaje con el criterio de Costo Mínimo o el criterio de Vuelos Mínimos
@@ -145,10 +145,10 @@ seleccionadoCriterio_menu = OptionMenu(home, seleccionadoCriterio, *opcionesCrit
 seleccionadoCriterio_menu.pack()
 
 #Ubicación del Btn con la opción del criterio
-seleccionadoCriterio_menu.place(x="330", y="490")
+seleccionadoCriterio_menu.place(x="470", y="490")
 
 
-#Dibujando el Grafo Inicial completo sin los vuelos a realizar
+#Dibujando el Grafo Inicial completo sin los vuelos deseados por el usuario a realizar
 
 #Creación del grafo a dibujar
 grafoDibujo = nx.Graph()
@@ -248,7 +248,6 @@ def pintarGrafo(path):
             continue
         #Si no es asi, se deja del color inicial
         else:
-            print('black', arcos[x])
             colors_e.append('black')
             
     #Dibujando el grafo con sus respectivas configuraciones de tamaño, color, etc
@@ -266,10 +265,13 @@ def pintarGrafo(path):
     toolbar.update()
     canvas.get_tk_widget().place(x="790", y="150")
 
+#Declaración de labels que cambiarán dependiendo del resultado generado por el usuario
+#Label que indica el camino/vuelos/escalas
 label_camino = tk.Label(homeFrame, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7")
-label_camino.place(x="10", y="560")
+label_camino.place(x="15", y="595")
+#Label que indica el costo, número min de vuelos, etc
 label_respuesta = tk.Label(homeFrame, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7")
-label_respuesta.place(x="10", y="590")
+label_respuesta.place(x="15", y="615")
 
 #Método que permite ejecutar Dijkstra y mostrar los resultados en la interfaz
 def ejecutarDijkstra():
@@ -279,31 +281,33 @@ def ejecutarDijkstra():
     to = asignaCodigoDestino()
     route = toggleCriterio()
     visa = toggleVisa()
+    #Variables que permiten modificar los labels de respuesta
     respuesta = ''
     camino = ''
     global label_camino
     global label_respuesta
+    #Se crea el grafo
     g = createGraph()
 
+    #Si el destino es igual al origen se genera el mensaje
     if frm == to:
+        #Se muestra en interfaz el mensaje
+        respuesta = 'La ciudad de origen no puede ser igual a la ciudad de destino. Por favor, ingrese nuevamente su viaje.'
 
-        respuesta = 'La ciudad de origen no puede ser igual a la ciudad de destino.'
-
+    #Si el usuario no tiene visa y su ciudad de destino requiere visa
     elif g.get_vertex(to).visa == True and visa == False:
-
-		#Mensaje para los que no tienen visa y la ciudad la pide para ingresar
-        respuesta = 'Lo sentimos, usted no tiene VISA para ingresar a la ciudad de destino deseada.\n Por ello no podemos ofrecerle la ruta indicada.'
+		#Se muestra en interfaz el mensaje que no pueder hacer el viaje
+        respuesta = 'Lo sentimos, usted no tiene Visa para ingresar a la ciudad de destino deseada.'
 	
+    #Otros casos
     else:
-        #Se crea el grafo
-
         #Si el criterio seleccionado fue el del costo mínimo
         if route == 'Costo mínimo':
             # Se ejecuta el método correspondiente
             dijkstra_min_cost(g, g.get_vertex(frm), g.get_vertex(to), visa)
-            #Sino, si el usuario elige como criterio el número de vuelos mínimo
+        #Sino, si el usuario elige como criterio el número de vuelos mínimo
         else:
-            #Por ello, se ejecuta el método correspondiente
+            #Se ejecuta el método correspondiente
             dijkstra_min_steps(g, g.get_vertex(frm), g.get_vertex(to), visa)
 
         #Reconstruir el camino obtenido por el método correspondiente
@@ -313,8 +317,7 @@ def ejecutarDijkstra():
         shortest(target, path, costo)
         path.reverse()
 
-        #Mensaje de resultado para el usuario
-        print(path)
+        #Grafo
         grafoFinal = nx.Graph()
 
         #Si no hay camino entre las dos ciudades
@@ -330,8 +333,8 @@ def ejecutarDijkstra():
         #Se pinta el grafo con los resultados
         pintarGrafo(path)
 
-        camino = "La ruta que debe tomar para llegar a su destino es: " + str(path)
-        #Datos finales que mostrar en interfaz de la búsqueda del vuelo
+        #Mensaje que indica el camino que debe tomar el usuario
+        camino = "La ruta que debe tomar para llegar a su destino es: " + str(path)+"."
 
         #Colocando el dibujo del grafo con los resultados en la ventana de Tkinter
         canvas.get_tk_widget().pack()
@@ -339,11 +342,12 @@ def ejecutarDijkstra():
         toolbar.update()
         canvas.get_tk_widget().place(x="775", y="150")
 
+    #Mostrando los labels con sus respectivos mensajes
     label_camino.config(text = camino)
     label_respuesta.config(text = respuesta)
 
 
-#Boton que lleva a la seleccion de vuelo
+#Boton que lleva a la selección de vuelo
 botonComenzar = Button(homeFrame, text="Buscar Viaje", width=25,height=1, bg="#B6CBDE", font=("Roboto", 10, "bold"), command=ejecutarDijkstra).place(x="600", y="580", anchor="center")
 
 home.mainloop()
