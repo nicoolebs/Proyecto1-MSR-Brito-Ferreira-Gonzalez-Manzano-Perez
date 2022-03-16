@@ -189,7 +189,7 @@ grafoDibujo.add_edges_from(arcosGrafoDibujo)
 pos = nx.spring_layout(grafoDibujo)
 nx.draw_networkx_nodes(grafoDibujo, pos, node_size=10)
 nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.2, edge_color='black', arrows="-")
-labels_params = {"font_size":5 }
+labels_params = {"font_size": 5}
 nx.draw_networkx_labels(grafoDibujo, pos, **labels_params)
 
 canvas = FigureCanvasTkAgg(figure,
@@ -204,6 +204,51 @@ toolbar.update()
 
 # placing the toolbar on the Tkinter window
 canvas.get_tk_widget().place(x="775", y="160")
+
+#LA FUNCION QUE HACE QUE SE VUELVA A PINTAR EL GRAFO (HAY QUE PONERLO QUE SE PONGA ENCIMA)
+def pintarGrafo(path):
+    colors=[]
+
+    listaCiudades = [
+        "CCS",
+        "AUA",
+        "BON",
+        "CUR",
+        "SXM",
+        "SDQ",
+        "SBH",
+        "POS",
+        "BGI",
+        "FDF",
+        "PTP"
+    ]
+
+    #EL FOR QUE TENEMOS QUE HACER DINAMICO
+    for ciudad in listaCiudades:
+        if ciudad == path[0] or ciudad == path[1]:
+            colors.append('red')
+        else:
+            colors.append('black')
+
+    nx.draw_networkx_nodes(grafoDibujo, pos, node_color=colors, node_size=10)
+    nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.2, edge_color='black', arrows="-")
+    labels_params = {"font_size": 5}
+    nx.draw_networkx_labels(grafoDibujo, pos, **labels_params)
+
+    canvas = FigureCanvasTkAgg(figure,
+                               master=home)
+    canvas.draw()
+
+    # placing the canvas on the Tkinter window
+    canvas.get_tk_widget().pack()
+
+    toolbar = NavigationToolbar2Tk(canvas, home)
+    toolbar.update()
+
+    # placing the toolbar on the Tkinter window
+    canvas.get_tk_widget().place(x="50", y="160")
+
+
 
 
 #METODO PARA EJECUTAR DIJKSTRA Y ENSEÑAR RESULTADO EN PANTALLA
@@ -263,6 +308,8 @@ def ejecutarDijkstra():
 
             print(str(path[x]))
 
+        pintarGrafo(path)
+
     # Si el usuario elige como criterio el número de vuelos mínimo
     else:
 
@@ -298,6 +345,9 @@ def ejecutarDijkstra():
 
             print(str(path[x]))
 
+        pintarGrafo(path)
+
+
     Label(homeFrame, text="La ruta que debe tomar para llegar a su destino es:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="560")
     Label(homeFrame, text=path, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="560")
 
@@ -315,6 +365,8 @@ def ejecutarDijkstra():
     canvas = FigureCanvasTkAgg(figure,
                                master=home)
     canvas.draw()
+
+
 
     # placing the canvas on the Tkinter window
     canvas.get_tk_widget().pack()
