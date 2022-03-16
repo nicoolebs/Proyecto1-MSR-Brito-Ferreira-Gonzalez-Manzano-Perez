@@ -1,6 +1,7 @@
 #Importaciones respectivas
+from operator import le
 from tkinter import *
-from turtle import width
+from turtle import color, width
 from PIL import Image, ImageTk
 from dijkstra import *
 from graph import *
@@ -253,15 +254,19 @@ def ejecutarDijkstra():
 
         print('El costo mínimo de ' + frm + ' a ' + to + ' es de: $' + str(target.get_distance()))
         print('En este, el camino a tomar será: ')
-        for x in range(len(path)):
-            grafoFinal.add_node(path[x])
+        
+        colors = []
 
-            if x < len(path)-1:
-                grafoFinal.add_edge(path[x],path[x+1])
-            else:
-                grafoFinal.add_edge(path[x-1], path[x])
+        for x in range(len(arcosGrafoDibujo)):
 
-            print(str(path[x]))
+            grafoFinal.add_edge(arcosGrafoDibujo[x][0], arcosGrafoDibujo[x][1])
+
+            for y in range(len(path) - 1):
+
+                if arcosGrafoDibujo[x] == (path[y], path[y + 1]) or arcosGrafoDibujo[x] == (path[y + 1], path[y]):
+                    colors.append('red')
+                else:
+                    colors.append('blue')
 
     # Si el usuario elige como criterio el número de vuelos mínimo
     else:
@@ -287,16 +292,19 @@ def ejecutarDijkstra():
             'El número mínimo de vuelos de ' + frm + ' a ' + to + ' es de ' + str(target.get_distance()) + ' vuelo-s-')
         print('Para este caso el costo de ' + frm + ' a ' + to + ' es de: $' + str(sum(costo)))
         print('En este, el camino a tomar será: ')
-        for x in range(len(path)):
 
-            grafoFinal.add_node(path[x])
+        colors = []
 
-            if x < len(path) - 1:
-                grafoFinal.add_edge(path[x], path[x + 1])
-            else:
-                grafoFinal.add_edge(path[x - 1], path[x])
+        for x in range(len(arcosGrafoDibujo)):
 
-            print(str(path[x]))
+            grafoFinal.add_edge(arcosGrafoDibujo[x])
+
+            for y in range(len(path) - 1):
+
+                if arcosGrafoDibujo[x] == (path[y], path[y+1]) or arcosGrafoDibujo[x] == (path[y+1], path[y]):
+                    colors.append('red')
+                else:
+                    colors.append('blue')
 
     Label(homeFrame, text="La ruta que debe tomar para llegar a su destino es:", fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="10", y="560")
     Label(homeFrame, text=path, fg="#000000", font=("Roboto", 12, "bold"), bg="#f0ebe7").place(x="400", y="560")
@@ -308,7 +316,7 @@ def ejecutarDijkstra():
 
     pos = nx.spring_layout(grafoFinal)
     nx.draw_networkx_nodes(grafoFinal, pos, node_size=10)
-    nx.draw_networkx_edges(grafoFinal, pos, edgelist=grafoFinal.edges(), width=0.2, edge_color='black', arrows="-")
+    nx.draw_networkx_edges(grafoFinal, pos, edgelist=grafoFinal.edges(), width=0.2, edge_color=colors, arrows="-")
     labels_params = {"font_size": 5}
     nx.draw_networkx_labels(grafoFinal, pos, **labels_params)
 
@@ -323,7 +331,7 @@ def ejecutarDijkstra():
     toolbar.update()
 
     # placing the toolbar on the Tkinter window
-    canvas.get_tk_widget().place(x="50", y="650")
+    canvas.get_tk_widget().place(x="100", y="160")
 
 
 # Boton que lleva a la interfaz de seleccion de vuelo
