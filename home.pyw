@@ -226,11 +226,37 @@ def pintarGrafo(path):
         else:
             colors.append('black')
 
+    colors_e = []
 
-    print("nodos", grafoDibujo.nodes)
+    found_e = False
+    print(grafoDibujo.edges)
+
+    for x in range(len(arcosGrafoDibujo)):
+
+        found_e2 = True
+
+        for y in range(len(path) - 1):
+
+            print((path[y], path[y + 1]))
+            print((path[y+1], path[y]))
+
+            if arcosGrafoDibujo[x] == (path[y], path[y + 1]) or arcosGrafoDibujo[x] == (path[y + 1], path[y]):
+                colors_e.append('red')
+                print('red', arcosGrafoDibujo[x])
+                found_e = True
+                continue
+            if found_e:
+                found_e = False
+                continue
+            else:
+                if found_e2:
+                    print('black', arcosGrafoDibujo[x])
+                    found_e2 = False
+                    colors_e.append('black')
+            
 
     nx.draw_networkx_nodes(grafoDibujo, pos, node_color=colors, node_size=10)
-    nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.2, edge_color='black', arrows="-")
+    nx.draw_networkx_edges(grafoDibujo, pos, edgelist=grafoDibujo.edges(), width=0.2, edge_color=colors_e, arrows="-")
     labels_params = {"font_size": 5}
     nx.draw_networkx_labels(grafoDibujo, pos, **labels_params)
 
